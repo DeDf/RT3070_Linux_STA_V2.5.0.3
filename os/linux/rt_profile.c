@@ -528,7 +528,6 @@ int	RTMPSendPackets(
 	PRTMP_ADAPTER pAd = (PRTMP_ADAPTER)MiniportAdapterContext;
 	PNDIS_PACKET pPacket = ppPacketArray[0];
 
-
 	if (pPacket == NULL)
 		goto done;
 
@@ -562,8 +561,6 @@ int	RTMPSendPackets(
 		return 0;
 	}
 
-
-
 	RTMP_SET_PACKET_5VT(pPacket, 0);
 /*	MiniportMMRequest(pAd, pkt->data, pkt->len); */
 #ifdef CONFIG_5VT_ENHANCE
@@ -576,7 +573,6 @@ int	RTMPSendPackets(
 #ifdef CONFIG_STA_SUPPORT
 	IF_DEV_CONFIG_OPMODE_ON_STA(pAd)
 	{
-
 		STASendPackets((NDIS_HANDLE)pAd, (PPNDIS_PACKET) &pPacket, 1);
 	}
 

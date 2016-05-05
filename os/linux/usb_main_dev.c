@@ -1,29 +1,11 @@
-/*
- *************************************************************************
+/*************************************************************************
  * Ralink Tech Inc.
  * 5F., No.36, Taiyuan St., Jhubei City,
  * Hsinchu County 302,
  * Taiwan, R.O.C.
  *
  * (c) Copyright 2002-2010, Ralink Technology, Inc.
- *
- * This program is free software; you can redistribute it and/or modify  *
- * it under the terms of the GNU General Public License as published by  *
- * the Free Software Foundation; either version 2 of the License, or     *
- * (at your option) any later version.                                   *
- *                                                                       *
- * This program is distributed in the hope that it will be useful,       *
- * but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- * GNU General Public License for more details.                          *
- *                                                                       *
- * You should have received a copy of the GNU General Public License     *
- * along with this program; if not, write to the                         *
- * Free Software Foundation, Inc.,                                       *
- * 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- *                                                                       *
  *************************************************************************/
-
 
 #define RTMP_MODULE_OS
 
@@ -31,7 +13,6 @@
 #include "rtmp_comm.h"
 #include "rt_os_util.h"
 #include "rt_os_net.h"
-
 
 /* Following information will be show when you run 'modinfo' */
 /* *** If you have a solution for the bug in current version of driver, please mail to me. */
@@ -482,20 +463,13 @@ VOID __exit rtusb_exit(void)
 	printk("<--- rtusb exit\n");
 }
 
+
+/*-------------------------------ENTRY---------------------------------*/
+
 module_init(rtusb_init);
 module_exit(rtusb_exit);
 
-
-
-
-/*---------------------------------------------------------------------	*/
-/* function declarations												*/
-/*---------------------------------------------------------------------	*/
-
-
-
-/*
-========================================================================
+/*======================================================================
 Routine Description:
     Release allocated resources.
 
@@ -503,12 +477,7 @@ Arguments:
     *dev				Point to the PCI or USB device
 	pAd					driver control block pointer
 
-Return Value:
-    None
-
-Note:
-========================================================================
-*/
+======================================================================*/
 static void rt2870_disconnect(struct usb_device *dev, VOID *pAd)
 {
 	struct net_device *net_dev;
@@ -719,7 +688,9 @@ static int rt2870_probe(
 #ifdef PRE_ASSIGN_MAC_ADDR
 	UCHAR PermanentAddress[MAC_ADDR_LEN];
 	RTMP_DRIVER_MAC_ADDR_GET(pAd, &PermanentAddress[0]);
-	DBGPRINT(RT_DEBUG_TRACE, ("@%s MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n", __FUNCTION__, PermanentAddress[0], PermanentAddress[1],PermanentAddress[2],PermanentAddress[3],PermanentAddress[4],PermanentAddress[5]));
+	DBGPRINT(RT_DEBUG_TRACE, ("@%s MAC address: %02x:%02x:%02x:%02x:%02x:%02x\n",
+        __FUNCTION__,
+        PermanentAddress[0], PermanentAddress[1],PermanentAddress[2],PermanentAddress[3],PermanentAddress[4],PermanentAddress[5]));
 	/* Set up the Mac address */
 	RtmpOSNetDevAddrSet(OpMode, net_dev, &PermanentAddress[0], NULL);
 #endif /* PRE_ASSIGN_MAC_ADDR */
@@ -739,7 +710,6 @@ err_out:
 	*ppAd = NULL;
 
 	return -1;
-	
 }
 
 
@@ -787,13 +757,12 @@ VOID RtmpNetOpsInit(
 {
 	RTMP_NET_ABL_OPS *pDrvNetOps = (RTMP_NET_ABL_OPS *)pDrvNetOpsSrc;
 
-
 	pDrvNetOps->RtmpNetUsbBulkOutDataPacketComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutDataPacketComplete;
 	pDrvNetOps->RtmpNetUsbBulkOutMLMEPacketComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutMLMEPacketComplete;
-	pDrvNetOps->RtmpNetUsbBulkOutNullFrameComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutNullFrameComplete;
-	pDrvNetOps->RtmpNetUsbBulkOutRTSFrameComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutRTSFrameComplete;
-	pDrvNetOps->RtmpNetUsbBulkOutPsPollComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutPsPollComplete;
-	pDrvNetOps->RtmpNetUsbBulkRxComplete = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkRxComplete;
+	pDrvNetOps->RtmpNetUsbBulkOutNullFrameComplete  = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutNullFrameComplete;
+	pDrvNetOps->RtmpNetUsbBulkOutRTSFrameComplete   = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutRTSFrameComplete;
+	pDrvNetOps->RtmpNetUsbBulkOutPsPollComplete     = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkOutPsPollComplete;
+	pDrvNetOps->RtmpNetUsbBulkRxComplete            = (RTMP_DRV_USB_COMPLETE_HANDLER)RTUSBBulkRxComplete;
 }
 
 
@@ -802,12 +771,11 @@ VOID RtmpNetOpsSet(
 {
 	RTMP_NET_ABL_OPS *pDrvNetOps = (RTMP_NET_ABL_OPS *)pDrvNetOpsSrc;
 
-
 	RtmpDrvUsbBulkOutDataPacketComplete = pDrvNetOps->RtmpDrvUsbBulkOutDataPacketComplete;
 	RtmpDrvUsbBulkOutMLMEPacketComplete = pDrvNetOps->RtmpDrvUsbBulkOutMLMEPacketComplete;
-	RtmpDrvUsbBulkOutNullFrameComplete = pDrvNetOps->RtmpDrvUsbBulkOutNullFrameComplete;
-	RtmpDrvUsbBulkOutRTSFrameComplete = pDrvNetOps->RtmpDrvUsbBulkOutRTSFrameComplete;
-	RtmpDrvUsbBulkOutPsPollComplete = pDrvNetOps->RtmpDrvUsbBulkOutPsPollComplete;
-	RtmpDrvUsbBulkRxComplete = pDrvNetOps->RtmpDrvUsbBulkRxComplete;
+	RtmpDrvUsbBulkOutNullFrameComplete  = pDrvNetOps->RtmpDrvUsbBulkOutNullFrameComplete;
+	RtmpDrvUsbBulkOutRTSFrameComplete   = pDrvNetOps->RtmpDrvUsbBulkOutRTSFrameComplete;
+	RtmpDrvUsbBulkOutPsPollComplete     = pDrvNetOps->RtmpDrvUsbBulkOutPsPollComplete;
+	RtmpDrvUsbBulkRxComplete            = pDrvNetOps->RtmpDrvUsbBulkRxComplete;
 }
 #endif /* OS_ABL_SUPPORT */
